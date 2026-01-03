@@ -8,15 +8,15 @@ Designed to be fully data-driven, NC-Kinetix accepts JSON instructions to choreo
 
 ---
 
-## ✨ Features
+## Features
 
-- **🎥 Virtual Camera System**: Cinematic 2D camera control supporting smooth panning, zooming, and rolling across an infinite canvas.
-- **⚡ Static Canvas Architecture**: A robust Scene Graph hierarchy that maintains relative positioning (e.g., letters → words → sentences), essential for kinetic typography.
-- **🔡 SDF Text Rendering**: Utilizes **Signed Distance Fields** (FreeType) to ensure text remains razor-sharp at any zoom level, from macro shots to wide-angle views.
-- **🎹 Data-Driven Animation**: Animations are defined via portable JSON sequences, supporting complex timeline manipulation and precise audio synchronization.
-- **🚀 High Performance**: Built on **C++20** and **Modern OpenGL (4.5+)**, optimized for maximum framerate and rendering efficiency.
+- **Virtual Camera System**: Cinematic 2D camera control supporting smooth panning, zooming, and rolling across an infinite canvas.
+- **Static Canvas Architecture**: A robust Scene Graph hierarchy that maintains relative positioning (e.g., letters -> words -> sentences), essential for kinetic typography.
+- **SDF Text Rendering**: Utilizes **Signed Distance Fields** (FreeType) to ensure text remains razor-sharp at any zoom level, from macro shots to wide-angle views.
+- **Data-Driven Animation**: Animations are defined via portable JSON sequences, supporting complex timeline manipulation and precise audio synchronization.
+- **High Performance**: Built on **C++20** and **Modern OpenGL (4.5+)**, optimized for maximum framerate and rendering efficiency.
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 | Component | Technology | Description |
 | :--- | :--- | :--- |
@@ -28,7 +28,7 @@ Designed to be fully data-driven, NC-Kinetix accepts JSON instructions to choreo
 | **Serialization** | **nlohmann/json** | Modern JSON parsing for animation data. |
 | **Build System** | **CMake** | Cross-platform build configuration. |
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -60,21 +60,15 @@ Ensure you have the following installed on your development machine:
     cmake --build . --config Release
     ```
 
-## 🤝 Contributing
+## Contributing
 
-Contributions are welcome! Please follow these steps:
+Contributions are welcome. Please follow these steps:
 1.  Fork the project.
 2.  Create your feature branch (`git checkout -b feature/AmazingFeature`).
 3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`).
 4.  Push to the branch (`git push origin feature/AmazingFeature`).
 5.  Open a Pull Request.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the `LICENSE` file for details.
-
----
-
-<p align="center">
-  Developed by <a href="https://github.com/AgentHitmanFaris">AgentHitmanFaris</a>
-</p>
