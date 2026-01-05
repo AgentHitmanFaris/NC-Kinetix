@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <map>
 
 struct GLFWwindow;
 
@@ -14,6 +15,12 @@ namespace nc {
     namespace render {
         class Camera2D;
         class TextRenderer;
+    }
+    namespace animation {
+        class Timeline;
+    }
+    namespace data {
+        class ProjectLoader;
     }
 
     class Engine {
@@ -40,6 +47,10 @@ namespace nc {
         std::shared_ptr<scene::SceneNode> m_rootNode;
         std::unique_ptr<render::Camera2D> m_camera;
         std::unique_ptr<render::TextRenderer> m_textRenderer;
+        std::unique_ptr<animation::Timeline> m_timeline;
+        std::unique_ptr<data::ProjectLoader> m_projectLoader;
+        
+        std::map<std::string, std::shared_ptr<scene::SceneNode>> m_nodeMap;
         
         bool m_running;
     };

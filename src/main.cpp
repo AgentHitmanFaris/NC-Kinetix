@@ -5,7 +5,8 @@ int main() {
     engine.init();
     
     // Simulate loading data
-    engine.loadProject("schema_proposal.json");
+    // Simulate loading data
+    engine.loadProject("demo_project.json");
     
     engine.run();
     

@@ -4,7 +4,7 @@
 
 **NC-Kinetix** is a high-performance **Kinetic Typography Engine** tailored for Windows. It renders complex, resolution-independent text animations by employing a "Static Canvas" architecture where a dynamic Virtual Camera maneuvers through the scene—mirroring professional motion graphics workflows found in tools like After Effects.
 
-Designed to be fully data-driven, NC-Kinetix accepts JSON instructions to choreograph text movements, serving as the dedicated rendering backend for [NC-KTV](https://github.com/AgentHitmanFaris/NC-KTV).
+Designed to be fully data-driven, NC-Kinetix accepts JSON instructions to choreograph text movements, serving as the dedicated rendering backend for [NC-KTV](https://github.com/AgentHitmanFaris/NC-KTV). Check out `examples/demo_project.json` for a sample configuration.
 
 ---
 

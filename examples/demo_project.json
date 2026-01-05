@@ -1,0 +1,164 @@
+{
+  "meta": {
+    "version": "1.0",
+    "project_name": "Kinetic Demo 1",
+    "bpm": 120
+  },
+  "assets": {
+    "fonts": [
+      { "id": "font_bold", "path": "assets/Roboto-Bold.ttf" },
+      { "id": "font_reg", "path": "assets/Roboto-Regular.ttf" }
+    ]
+  },
+  "layout": [
+    {
+      "id": "node_intro",
+      "type": "group",
+      "position": { "x": 0, "y": 0 },
+      "children": [
+        {
+          "id": "title",
+          "type": "text",
+          "content": "NC-KINETIX",
+          "font_id": "font_bold",
+          "position": { "x": -300, "y": 0 },
+          "scale": 0.0,
+          "color": { "r": 1, "g": 1, "b": 1, "a": 0 }
+        },
+        {
+          "id": "text_rot",
+          "type": "text",
+          "content": "ROTATION",
+          "font_id": "font_bold",
+          "position": { "x": -250, "y": 0 },
+          "scale": 0.0,
+          "rotation": 0.0
+        },
+        {
+          "id": "text_scale",
+          "type": "text",
+          "content": "SCALE",
+          "font_id": "font_bold",
+          "position": { "x": -150, "y": 0 },
+          "scale": 0.0
+        },
+        {
+          "id": "text_cam",
+          "type": "text",
+          "content": "CAMERA",
+          "font_id": "font_bold",
+          "position": { "x": -200, "y": 0 },
+          "scale": 0.0
+        }
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "time_start": 0.0,
+      "time_end": 1.0,
+      "target_id": "title",
+      "type": "color",
+      "easing": "linear",
+      "from": { "r": 1, "g": 1, "b": 1, "a": 0 },
+      "to": { "r": 1, "g": 1, "b": 1, "a": 1 }
+    },
+    {
+      "time_start": 0.0,
+      "time_end": 1.5,
+      "target_id": "title",
+      "type": "transform",
+      "easing": "easeOutElastic",
+      "from": { "scale": 0.0 },
+      "to": { "scale": 2.0 }
+    },
+    {
+      "time_start": 2.0,
+      "time_end": 2.5,
+      "target_id": "title",
+      "type": "color",
+      "from": { "r": 1, "g": 1, "b": 1, "a": 1 },
+      "to": { "r": 1, "g": 1, "b": 1, "a": 0 }
+    },
+    {
+      "time_start": 2.5,
+      "time_end": 3.0,
+      "target_id": "text_rot",
+      "type": "transform",
+      "easing": "easeOutElastic",
+      "from": { "scale": 0.0 },
+      "to": { "scale": 1.5 }
+    },
+    {
+      "time_start": 2.5,
+      "time_end": 4.5,
+      "target_id": "text_rot",
+      "type": "transform",
+      "easing": "easeInOutQuad",
+      "from": { "rotation": 0.0 },
+      "to": { "rotation": 360.0 }
+    },
+    {
+      "time_start": 4.5,
+      "time_end": 5.0,
+      "target_id": "text_rot",
+      "type": "transform",
+      "from": { "scale": 1.5 },
+      "to": { "scale": 0.0 }
+    },
+    {
+      "time_start": 5.0,
+      "time_end": 5.5,
+      "target_id": "text_scale",
+      "type": "transform",
+      "easing": "easeOutElastic",
+      "from": { "scale": 0.0 },
+      "to": { "scale": 1.0 }
+    },
+    {
+      "time_start": 5.5,
+      "time_end": 6.0,
+      "target_id": "text_scale",
+      "type": "transform",
+      "easing": "easeInOutQuad",
+      "from": { "scale": 1.0 },
+      "to": { "scale": 3.0 }
+    },
+    {
+      "time_start": 6.0,
+      "time_end": 6.5,
+      "target_id": "text_scale",
+      "type": "transform",
+      "easing": "easeInOutQuad",
+      "from": { "scale": 3.0 },
+      "to": { "scale": 0.0 }
+    },
+    {
+      "time_start": 6.5,
+      "time_end": 7.0,
+      "target_id": "text_cam",
+      "type": "transform",
+      "easing": "easeOutElastic",
+      "from": { "scale": 0.0 },
+      "to": { "scale": 2.0 }
+    },
+    {
+      "time_start": 7.0,
+      "time_end": 8.0,
+      "target_id": "camera",
+      "type": "transform",
+      "easing": "easeInOutQuad",
+      "from": { "zoom": 1.0, "rotation": 0.0 },
+      "to": { "zoom": 1.5, "rotation": 15.0 }
+    },
+    {
+      "time_start": 8.0,
+      "time_end": 9.0,
+      "target_id": "camera",
+      "type": "transform",
+      "easing": "easeInOutQuad",
+      "from": { "zoom": 1.5, "rotation": 15.0 },
+      "to": { "zoom": 1.0, "rotation": 0.0 }
+    }
+  ]
+}

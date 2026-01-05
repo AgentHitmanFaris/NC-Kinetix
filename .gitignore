@@ -6,3 +6,4 @@ tools/
 *.a
 *.so
 GEMINI.md
+cmake_folder/
