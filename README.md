@@ -11,6 +11,10 @@ Designed to be fully data-driven, NC-Kinetix accepts JSON instructions to choreo
 ## Features
 
 - **Virtual Camera System**: Cinematic 2D camera control supporting smooth panning, zooming, and rolling across an infinite canvas.
+- **Sprite & Image Support**: Import and animate PNG/JPG images alongside text elements seamlessly.
+- **Advanced Audio Sync**: Precision timeline synchronization with audio tracks (`.mp3`, `.wav`) for rhythm-perfect motion graphics.
+- **Unicode Text**: Full support for UTF-8 languages and symbols.
+- **Per-Character Animation**: toggle `split_text: true` to automatically break strings into individual nodes for granular control.
 - **Static Canvas Architecture**: A robust Scene Graph hierarchy that maintains relative positioning (e.g., letters -> words -> sentences), essential for kinetic typography.
 - **SDF Text Rendering**: Utilizes **Signed Distance Fields** (FreeType) to ensure text remains razor-sharp at any zoom level, from macro shots to wide-angle views.
 - **Data-Driven Animation**: Animations are defined via portable JSON sequences, supporting complex timeline manipulation and precise audio synchronization.

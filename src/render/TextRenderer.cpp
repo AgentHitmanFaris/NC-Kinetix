@@ -1,5 +1,6 @@
 #include "nc/render/TextRenderer.h"
 #include "nc/render/Shader.h"
+#include "nc/utils/StringUtils.h"
 #include <glad/glad.h>
 #include <iostream>
 #include <memory>
@@ -95,8 +96,8 @@ void main() {
         // Disable byte-alignment restriction
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-        // Load first 128 characters of ASCII set
-        for (unsigned char c = 0; c < 128; c++) {
+        // Load first 256 characters (ASCII + Latin-1 Supplement)
+        for (uint32_t c = 0; c < 256; c++) {
             // Load character glyph 
             if (FT_Load_Char(m_face, c, FT_LOAD_RENDER)) {
                 std::cerr << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
@@ -132,7 +133,7 @@ void main() {
                 glm::ivec2(m_face->glyph->bitmap_left, m_face->glyph->bitmap_top),
                 static_cast<unsigned int>(m_face->glyph->advance.x)
             };
-            m_characters.insert(std::pair<char, Character>(c, character));
+            m_characters.insert(std::pair<uint32_t, Character>(c, character));
         }
         
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -174,9 +175,20 @@ void main() {
         float x = 0.0f; 
         float y = 0.0f;
 
-        std::string::const_iterator c;
-        for (c = text.begin(); c != text.end(); c++) {
-            Character ch = m_characters[*c];
+        const char* ptr = text.c_str();
+        const char* end = ptr + text.length();
+
+        while (ptr < end) {
+            utils::Codepoint cp = utils::decodeUTF8(ptr);
+            uint32_t c = cp.value;
+            
+            // Safety check for unknown chars
+            if (m_characters.find(c) == m_characters.end()) {
+                ptr += cp.length;
+                continue;
+            }
+
+            Character ch = m_characters[c];
 
             float xpos = x + ch.bearing.x;
             float ypos = y - (ch.size.y - ch.bearing.y);
@@ -208,11 +220,19 @@ void main() {
             
             // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
             x += (ch.advance >> 6); // Bitshift by 6 to get value in pixels (2^6 = 64)
+            ptr += cp.length;
         }
-        
-        glBindVertexArray(0);
+
         glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_BLEND);
+    }
+
+    const Character* TextRenderer::getCharacter(uint32_t c) const {
+        auto it = m_characters.find(c);
+        if (it != m_characters.end()) {
+            return &it->second;
+        }
+        return nullptr;
     }
 
 }

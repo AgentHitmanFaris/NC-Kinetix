@@ -1,9 +1,11 @@
 #include "nc/data/ProjectLoader.h"
 #include "nc/scene/SceneNode.h"
 #include "nc/scene/TextNode.h"
+#include "nc/scene/SpriteNode.h"
 #include "nc/animation/Timeline.h"
 #include "nc/render/TextRenderer.h"
 #include "nc/render/Camera2D.h"
+#include "nc/utils/StringUtils.h"
 #include <fstream>
 #include <iostream>
 
@@ -25,7 +27,13 @@ namespace nc::data {
             m_data = nlohmann::json::parse(file);
             file.close();
             
-            buildSceneGraph();
+            if (m_data.contains("audio")) {
+                m_audioPath = m_data["audio"];
+            } else if (m_data.contains("assets") && m_data["assets"].contains("audio")) {
+                m_audioPath = m_data["assets"]["audio"];
+            }
+
+            // buildSceneGraph(); // <- Postponed until fonts are loaded
             buildTimeline();
             
             std::cout << "Loaded project: " << jsonPath << std::endl;
@@ -40,7 +48,15 @@ namespace nc::data {
     bool ProjectLoader::loadFromJSON(const nlohmann::json& data) {
         try {
             m_data = data;
-            buildSceneGraph();
+            
+            // Parse audio path
+            if (m_data.contains("audio")) {
+                m_audioPath = m_data["audio"];
+            } else if (m_data.contains("assets") && m_data["assets"].contains("audio")) {
+                m_audioPath = m_data["assets"]["audio"];
+            }
+
+            // buildSceneGraph();
             buildTimeline();
             return true;
         }
@@ -71,7 +87,7 @@ namespace nc::data {
         return true;
     }
 
-    void ProjectLoader::buildSceneGraph() {
+    void ProjectLoader::buildSceneGraph(render::TextRenderer* textRenderer) {
         m_rootNode = std::make_shared<scene::SceneNode>("Root");
         m_nodeMap.clear();
         
@@ -80,14 +96,14 @@ namespace nc::data {
         }
         
         for (const auto& nodeData : m_data["layout"]) {
-            auto node = createNodeFromJSON(nodeData);
+            auto node = createNodeFromJSON(nodeData, textRenderer);
             if (node) {
                 m_rootNode->addChild(node);
             }
         }
     }
 
-    std::shared_ptr<scene::SceneNode> ProjectLoader::createNodeFromJSON(const nlohmann::json& nodeData) {
+    std::shared_ptr<scene::SceneNode> ProjectLoader::createNodeFromJSON(const nlohmann::json& nodeData, render::TextRenderer* textRenderer) {
         std::string id = nodeData["id"];
         std::string type = nodeData["type"];
         
@@ -95,13 +111,63 @@ namespace nc::data {
         
         if (type == "text") {
             auto textNode = std::make_shared<scene::TextNode>(id);
-            textNode->setContent(nodeData.value("content", ""));
+            std::string content = nodeData.value("content", "");
+            textNode->setContent(content);
             
             if (nodeData.contains("font_id")) {
                 textNode->setFontID(nodeData["font_id"]);
             }
             
+            // Handle Text Splitting
+            if (nodeData.contains("split_text") && nodeData["split_text"] == true && textRenderer) {
+                // We will clear the parent content so it doesn't render the full string twice
+                // But we keep it in memory if needed? No, standard is to not render parent.
+                textNode->setContent(""); 
+                
+                float xOffset = 0.0f;
+                // Simple splitting logic (UTF-8 aware)
+                const char* ptr = content.c_str();
+                const char* end = ptr + content.length();
+                int idx = 0;
+
+                while (ptr < end) {
+                    nc::utils::Codepoint cp = nc::utils::decodeUTF8(ptr);
+                    uint32_t c = cp.value;
+                    
+                    std::string charStr(ptr, cp.length);
+                    
+                    auto charNode = std::make_shared<scene::TextNode>(id + "_c" + std::to_string(idx));
+                    charNode->setContent(charStr);
+                    charNode->setFontID(textNode->getFontID());
+                    
+                    // Get advance
+                    const render::Character* ch = textRenderer->getCharacter(c);
+                    float advance = 0.0f;
+                    if (ch) {
+                        advance = (float)(ch->advance >> 6); // Convert 1/64 pixel to pixel
+                    } else {
+                         advance = 20.0f; // Fallback
+                    }
+                    
+                    charNode->setPosition(glm::vec2(xOffset, 0.0f));
+                    textNode->addChild(charNode);
+                    
+                    // Register child in map for animation targeting!
+                    m_nodeMap[charNode->getName()] = charNode;
+                    
+                    xOffset += advance;
+                    ptr += cp.length;
+                    idx++;
+                }
+            }
+            
             node = textNode;
+        } else if (type == "sprite") {
+            auto spriteNode = std::make_shared<scene::SpriteNode>(id);
+            if (nodeData.contains("texture")) {
+                spriteNode->setTexture(nodeData["texture"]);
+            }
+            node = spriteNode;
         } else if (type == "group") {
             node = std::make_shared<scene::SceneNode>(id);
         } else {
@@ -138,7 +204,7 @@ namespace nc::data {
         // Process children
         if (nodeData.contains("children")) {
             for (const auto& childData : nodeData["children"]) {
-                auto child = createNodeFromJSON(childData);
+                auto child = createNodeFromJSON(childData, textRenderer);
                 if (child) {
                     node->addChild(child);
                 }
@@ -288,6 +354,12 @@ namespace nc::data {
         if (easingStr == "easeOutQuad") return math::EasingType::QuadOut;
         if (easingStr == "easeInOutQuad") return math::EasingType::QuadInOut;
         if (easingStr == "easeOutElastic") return math::EasingType::ElasticOut;
+        if (easingStr == "easeInBack") return math::EasingType::BackIn;
+        if (easingStr == "easeOutBack") return math::EasingType::BackOut;
+        if (easingStr == "easeInOutBack") return math::EasingType::BackInOut;
+        if (easingStr == "easeInBounce") return math::EasingType::BounceIn;
+        if (easingStr == "easeOutBounce") return math::EasingType::BounceOut;
+        if (easingStr == "easeInOutBounce") return math::EasingType::BounceInOut;
         return math::EasingType::Linear;
     }
 

@@ -15,9 +15,13 @@ namespace nc {
     namespace render {
         class Camera2D;
         class TextRenderer;
+        class SpriteRenderer;
     }
     namespace animation {
         class Timeline;
+    }
+    namespace audio {
+        class AudioEngine;
     }
     namespace data {
         class ProjectLoader;
@@ -47,7 +51,9 @@ namespace nc {
         std::shared_ptr<scene::SceneNode> m_rootNode;
         std::unique_ptr<render::Camera2D> m_camera;
         std::unique_ptr<render::TextRenderer> m_textRenderer;
+        std::unique_ptr<render::SpriteRenderer> m_spriteRenderer;
         std::unique_ptr<animation::Timeline> m_timeline;
+        std::unique_ptr<audio::AudioEngine> m_audioEngine;
         std::unique_ptr<data::ProjectLoader> m_projectLoader;
         
         std::map<std::string, std::shared_ptr<scene::SceneNode>> m_nodeMap;

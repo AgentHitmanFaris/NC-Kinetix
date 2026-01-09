@@ -15,7 +15,13 @@ namespace nc::math {
         QuadIn,
         QuadOut,
         QuadInOut,
-        ElasticOut
+        ElasticOut,
+        BackIn,
+        BackOut,
+        BackInOut,
+        BounceIn,
+        BounceOut,
+        BounceInOut
     };
 
     template <Float T>
@@ -48,6 +54,57 @@ namespace nc::math {
             return t == 0 ? 0 : t == 1 ? 1 : std::pow(2, -10 * t) * std::sin((t * 10 - 0.75) * c4) + 1;
         }
 
+        // Back Ease In
+        static T BackIn(T t) {
+            constexpr T c1 = 1.70158;
+            constexpr T c3 = c1 + 1;
+            return c3 * t * t * t - c1 * t * t;
+        }
+
+        // Back Ease Out
+        static T BackOut(T t) {
+            constexpr T c1 = 1.70158;
+            constexpr T c3 = c1 + 1;
+            return 1 + c3 * std::pow(t - 1, 3) + c1 * std::pow(t - 1, 2);
+        }
+
+        // Back Ease In Out
+        static T BackInOut(T t) {
+            constexpr T c1 = 1.70158;
+            constexpr T c2 = c1 * 1.525;
+            return t < 0.5
+                ? (std::pow(2 * t, 2) * ((c2 + 1) * 2 * t - c2)) / 2
+                : (std::pow(2 * t - 2, 2) * ((c2 + 1) * (t * 2 - 2) + c2) + 2) / 2;
+        }
+
+        // Bounce Ease Out
+        static T BounceOut(T t) {
+            constexpr T n1 = 7.5625;
+            constexpr T d1 = 2.75;
+
+            if (t < 1 / d1) {
+                return n1 * t * t;
+            } else if (t < 2 / d1) {
+                return n1 * (t -= 1.5 / d1) * t + 0.75;
+            } else if (t < 2.5 / d1) {
+                return n1 * (t -= 2.25 / d1) * t + 0.9375;
+            } else {
+                return n1 * (t -= 2.625 / d1) * t + 0.984375;
+            }
+        }
+
+        // Bounce Ease In
+        static T BounceIn(T t) {
+            return 1 - BounceOut(1 - t);
+        }
+
+        // Bounce Ease In Out
+        static T BounceInOut(T t) {
+            return t < 0.5
+                ? (1 - BounceOut(1 - 2 * t)) / 2
+                : (1 + BounceOut(2 * t - 1)) / 2;
+        }
+
         // Generic function to apply easing
         static T Apply(EasingType type, T t) {
             // Clamp t between 0 and 1
@@ -60,6 +117,12 @@ namespace nc::math {
                 case EasingType::QuadOut: return QuadOut(t);
                 case EasingType::QuadInOut: return QuadInOut(t);
                 case EasingType::ElasticOut: return ElasticOut(t);
+                case EasingType::BackIn: return BackIn(t);
+                case EasingType::BackOut: return BackOut(t);
+                case EasingType::BackInOut: return BackInOut(t);
+                case EasingType::BounceIn: return BounceIn(t);
+                case EasingType::BounceOut: return BounceOut(t);
+                case EasingType::BounceInOut: return BounceInOut(t);
                 default: return t;
             }
         }

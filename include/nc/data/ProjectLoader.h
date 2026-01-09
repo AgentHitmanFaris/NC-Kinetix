@@ -40,17 +40,21 @@ namespace nc::data {
         // Font management
         bool loadFonts(render::TextRenderer* textRenderer);
         
+        std::string getAudioPath() const { return m_audioPath; }
+
+        void buildSceneGraph(render::TextRenderer* textRenderer = nullptr);
+
     private:
         nlohmann::json m_data;
+        std::string m_audioPath;
         std::shared_ptr<scene::SceneNode> m_rootNode;
         std::shared_ptr<animation::Timeline> m_timeline;
         std::map<std::string, std::shared_ptr<scene::SceneNode>> m_nodeMap;
         std::map<std::string, std::string> m_fontPaths;
         
-        void buildSceneGraph();
         void buildTimeline();
         
-        std::shared_ptr<scene::SceneNode> createNodeFromJSON(const nlohmann::json& nodeData);
+        std::shared_ptr<scene::SceneNode> createNodeFromJSON(const nlohmann::json& nodeData, render::TextRenderer* textRenderer);
         math::EasingType stringToEasing(const std::string& easingStr);
     };
 

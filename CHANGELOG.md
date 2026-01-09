@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.3.0] - 2026-01-09
+
+### Added - Visual Fidelity
+- **Sprite Support**:
+  - `SpriteNode` for rendering 2D images
+  - `SpriteRenderer` with batching support
+  - `Texture` resource management using `stb_image`
+- **Unicode Support**:
+  - `StringUtils::decodeUTF8` for UTF-8 string parsing
+  - `TextNode` support for multi-byte characters
+  - `TextRenderer` updated to handle extended character sets
+
+## [0.2.0] - 2026-01-09
+
+### Added - Core Mechanics
+- **Audio Integration**:
+  - `AudioEngine` using `miniaudio`
+  - Timeline synchronization with audio playback
+  - Audio file loading from project JSON
+- **Advanced Animation**:
+  - **Text Splitting**: Automatically split text into individual character nodes for per-character animation
+  - **New Easing Functions**:
+    - `BackIn`, `BackOut`, `BackInOut`
+    - `BounceIn`, `BounceOut`, `BounceInOut`
+    - `ElasticIn`, `ElasticOut`, `ElasticInOut`
+
 ## [0.1.0] - 2026-01-05
 
 ### Added - Full Implementation

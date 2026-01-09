@@ -35,6 +35,8 @@ namespace nc::render {
         
         // Get shader for external use
         Shader* getShader() const { return m_shader.get(); }
+        
+        const Character* getCharacter(uint32_t c) const;
 
     private:
         FT_Library m_ft;
@@ -42,7 +44,7 @@ namespace nc::render {
         
         // OpenGL resources
         unsigned int m_VAO, m_VBO;
-        std::map<char, Character> m_characters;
+        std::map<uint32_t, Character> m_characters;
         std::unique_ptr<Shader> m_shader;
         
         bool m_initialized;

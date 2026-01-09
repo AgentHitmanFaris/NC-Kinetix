@@ -16,6 +16,8 @@ namespace nc::scene {
         SceneNode(const std::string& name = "Node");
         virtual ~SceneNode() = default;
 
+        const std::string& getName() const { return m_name; }
+
         // Transform manipulation
         void setPosition(const glm::vec2& pos);
         void setRotation(float angleDegrees);
